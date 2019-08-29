@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Implementation of https://github.com/dtanzer/babystepstimer in JavaScript",
   "scripts": {
-    "test": "echo \"Error: no test specified\n\n¯\\_(ツ)_/¯\n\n\" && exit 1",
+    "test": "jest src/**",
     "test:e2e": "cypress run",
     "dev-server": "static build",
     "lint": "standard",
@@ -33,6 +33,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.0.0",
     "husky": "<2.0.0",
+    "jest": "17.0.3",
     "node-static": "^0.7.9",
     "standard": "^9.0.0",
     "validate-commit-msg": "^2.11.1"
