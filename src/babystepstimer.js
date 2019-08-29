@@ -71,6 +71,10 @@ class Babysteptimer {
     new Audio('./sounds/' + name + '.wav').play()
   }
 
+  isNeutralBackgroundColor () {
+    return this.bodyBackgroundColor === BACKGROUND_COLOR_NEUTRAL
+  }
+
   setNeutralBackgroundColor () {
     this.bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
   }
@@ -116,7 +120,7 @@ class TimerThread {
         this.currentCycleStartTime = Date.now()
         elapsedTime = Date.now() - this.currentCycleStartTime
       }
-      if (elapsedTime >= 5000 && elapsedTime < 6000 && BACKGROUND_COLOR_NEUTRAL !== this.timer.bodyBackgroundColor) {
+      if (elapsedTime >= 5000 && elapsedTime < 6000 && !this.timer.isNeutralBackgroundColor()) {
         this.timer.setNeutralBackgroundColor()
       }
 
