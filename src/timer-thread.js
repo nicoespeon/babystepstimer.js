@@ -43,7 +43,7 @@ class TimerThread {
           this.timer.playSound('struck')
         } else if (remainingTime === '00:00') {
           this.timer.playSound('shipsbell')
-          this.timer.setFailedBackgroundColor()
+          this.bodyBackground.setFailed()
         }
         this.timer.updateRunningTimer(elapsedTime)
         this.lastRemainingTime = remainingTime

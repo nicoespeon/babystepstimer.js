@@ -1,10 +1,7 @@
 /* globals Audio, alert */
 
 import { TimerThread } from './timer-thread'
-
-const BACKGROUND_COLOR_NEUTRAL = '#ffffff'
-const BACKGROUND_COLOR_FAILED = '#ffcccc'
-const BACKGROUND_COLOR_PASSED = '#ccffcc'
+import { BodyBackground } from './body-background'
 
 const SECONDS_IN_CYCLE = 120
 
@@ -22,35 +19,36 @@ class Babysteptimer {
     this.resetButton = resetButton
     this.startButton = startButton
     this.quitButton = quitButton
+    this.bodyBackground = new BodyBackground()
   }
 
   initialize () {
-    this.setNeutralBackgroundColor()
+    this.bodyBackground.setNeutral()
     this.updateStoppedTimer()
     this.quitButton.click(() => {
       alert('Please close the window!')
     })
 
-    const timerThread = new TimerThread(this)
+    const timerThread = new TimerThread(this, this.bodyBackground)
     this.startButton.click(() => {
-      this.setNeutralBackgroundColor()
+      this.bodyBackground.setNeutral()
       this.updateRunningTimer(0)
       timerThread.start()
     })
     this.stopButton.click(() => {
       timerThread.stop()
-      this.setNeutralBackgroundColor()
+      this.bodyBackground.setNeutral()
       this.updateStoppedTimer()
     })
     this.resetButton.click(() => {
       timerThread.reset()
-      this.setPassedBackgroundColor()
+      this.bodyBackground.setPassed()
     })
   }
 
   updateRunningTimer (time) {
     this.timerDisplay.text(this.getRemainingTimeCaption(time))
-    this.timer.css('background-color', this.bodyBackgroundColor)
+    this.timer.css('background-color', this.bodyBackground.color)
     this.stopButton.show()
     this.resetButton.show()
     this.startButton.hide()
@@ -58,7 +56,7 @@ class Babysteptimer {
 
   updateStoppedTimer () {
     this.timerDisplay.text(this.getRemainingTimeCaption(0))
-    this.timer.css('background-color', this.bodyBackgroundColor)
+    this.timer.css('background-color', this.bodyBackground.color)
     this.stopButton.hide()
     this.resetButton.hide()
     this.startButton.show()
@@ -73,22 +71,6 @@ class Babysteptimer {
 
   playSound (name) {
     new Audio('./sounds/' + name + '.wav').play()
-  }
-
-  isNeutralBackgroundColor () {
-    return this.bodyBackgroundColor === BACKGROUND_COLOR_NEUTRAL
-  }
-
-  setNeutralBackgroundColor () {
-    this.bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
-  }
-
-  setPassedBackgroundColor () {
-    this.bodyBackgroundColor = BACKGROUND_COLOR_PASSED
-  }
-
-  setFailedBackgroundColor () {
-    this.bodyBackgroundColor = BACKGROUND_COLOR_FAILED
   }
 }
 
