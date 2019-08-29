@@ -1,5 +1,7 @@
 /* globals Audio, alert */
 
+import { TimerThread } from './timer-thread'
+
 const BACKGROUND_COLOR_NEUTRAL = '#ffffff'
 const BACKGROUND_COLOR_FAILED = '#ffcccc'
 const BACKGROUND_COLOR_PASSED = '#ccffcc'
@@ -87,57 +89,6 @@ class Babysteptimer {
 
   setFailedBackgroundColor () {
     this.bodyBackgroundColor = BACKGROUND_COLOR_FAILED
-  }
-}
-
-/**
- * TODO: Maybe use requestAnimationFrame
- */
-class TimerThread {
-  constructor (timer) {
-    this.timer = timer
-    this.timerRunning = false
-  }
-
-  start () {
-    if (this.timerRunning) return
-    this.timerRunning = true
-    this.run()
-  }
-
-  stop () {
-    this.timerRunning = false
-  }
-
-  reset () {
-    this.currentCycleStartTime = Date.now()
-  }
-
-  run () {
-    this.reset()
-    this.interval = window.setInterval(() => {
-      if (!this.timerRunning) return
-      let elapsedTime = Date.now() - this.currentCycleStartTime
-      if (elapsedTime >= SECONDS_IN_CYCLE * 1000 + 980) {
-        this.currentCycleStartTime = Date.now()
-        elapsedTime = Date.now() - this.currentCycleStartTime
-      }
-      if (elapsedTime >= 5000 && elapsedTime < 6000 && !this.timer.isNeutralBackgroundColor()) {
-        this.timer.setNeutralBackgroundColor()
-      }
-
-      let remainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
-      if (remainingTime !== this.lastRemainingTime) {
-        if (remainingTime === '00:10') {
-          this.timer.playSound('struck')
-        } else if (remainingTime === '00:00') {
-          this.timer.playSound('shipsbell')
-          this.timer.setFailedBackgroundColor()
-        }
-        this.timer.updateRunningTimer(elapsedTime)
-        this.lastRemainingTime = remainingTime
-      }
-    }, 10)
   }
 }
 
