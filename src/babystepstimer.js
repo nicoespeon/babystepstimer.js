@@ -1,8 +1,5 @@
 /* globals Audio, alert */
 
-import jquery from 'jquery'
-
-const $ = jquery
 const BACKGROUND_COLOR_NEUTRAL = '#ffffff'
 const BACKGROUND_COLOR_FAILED = '#ffcccc'
 const BACKGROUND_COLOR_PASSED = '#ccffcc'
@@ -12,48 +9,48 @@ const SECONDS_IN_CYCLE = 120
 
 const twoDigitsFormat = number => ('0' + Math.floor(number)).slice(-2)
 
-const timerDisplay = $('#timeleft')
-const timer = $('#timer')
-const quitButton = $('#quit')
-const startButton = $('#start')
-const stopButton = $('#stop')
-const resetButton = $('#reset')
-
 /**
  * TODO: Implement Mouse Move (Does that actually make sense for this?)
  * TODO: Close does not really work … (Open an new window, to use it)
  */
 class Babysteptimer {
-  constructor () {
-    Babysteptimer.updateTimer(0, BACKGROUND_COLOR_NEUTRAL)
-    quitButton.click(() => {
+  constructor ({ timerDisplay, timer, stopButton, resetButton, startButton, quitButton }) {
+    this.timerDisplay = timerDisplay
+    this.timer = timer
+    this.stopButton = stopButton
+    this.resetButton = resetButton
+    this.startButton = startButton
+    this.quitButton = quitButton
+
+    this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL)
+    this.quitButton.click(() => {
       alert('Please close the window!')
     })
-    startButton.click(() => {
-      Babysteptimer.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, true)
+    this.startButton.click(() => {
+      this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, true)
       new TimerThread().start()
     })
-    stopButton.click(() => {
+    this.stopButton.click(() => {
       timerRunning = false
-      Babysteptimer.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, false)
+      this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, false)
     })
-    resetButton.click(() => {
+    this.resetButton.click(() => {
       currentCycleStartTime = Date.now()
       bodyBackgroundColor = BACKGROUND_COLOR_PASSED
     })
   }
 
-  static updateTimer (time, color, running) {
-    timerDisplay.text(Babysteptimer.getRemainingTimeCaption(time))
-    timer.css('background-color', color)
+  updateTimer (time, color, running) {
+    this.timerDisplay.text(Babysteptimer.getRemainingTimeCaption(time))
+    this.timer.css('background-color', color)
     if (running) {
-      stopButton.show()
-      resetButton.show()
-      startButton.hide()
+      this.stopButton.show()
+      this.resetButton.show()
+      this.startButton.hide()
     } else {
-      stopButton.hide()
-      resetButton.hide()
-      startButton.show()
+      this.stopButton.hide()
+      this.resetButton.hide()
+      this.startButton.show()
     }
   }
 
