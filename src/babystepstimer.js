@@ -39,7 +39,7 @@ class Babysteptimer {
       this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, false)
     })
     this.resetButton.click(() => {
-      currentCycleStartTime = Date.now()
+      timerThread.reset()
       bodyBackgroundColor = BACKGROUND_COLOR_PASSED
     })
   }
@@ -70,7 +70,6 @@ class Babysteptimer {
   }
 }
 
-let currentCycleStartTime
 let lastRemainingTime
 
 /**
@@ -92,14 +91,18 @@ class TimerThread {
     this.timerRunning = false
   }
 
+  reset () {
+    this.currentCycleStartTime = Date.now()
+  }
+
   run () {
-    currentCycleStartTime = Date.now()
+    this.reset()
     this.interval = window.setInterval(() => {
       if (!this.timerRunning) return
-      let elapsedTime = Date.now() - currentCycleStartTime
+      let elapsedTime = Date.now() - this.currentCycleStartTime
       if (elapsedTime >= SECONDS_IN_CYCLE * 1000 + 980) {
-        currentCycleStartTime = Date.now()
-        elapsedTime = Date.now() - currentCycleStartTime
+        this.currentCycleStartTime = Date.now()
+        elapsedTime = Date.now() - this.currentCycleStartTime
       }
       if (elapsedTime >= 5000 && elapsedTime < 6000 && BACKGROUND_COLOR_NEUTRAL !== bodyBackgroundColor) {
         bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
