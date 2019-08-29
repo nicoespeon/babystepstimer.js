@@ -4,6 +4,7 @@
   "description": "Implementation of https://github.com/dtanzer/babystepstimer in JavaScript",
   "scripts": {
     "test": "echo \"Error: no test specified\n\n¯\\_(ツ)_/¯\n\n\" && exit 1",
+    "test:e2e": "cypress run",
     "dev-server": "static build",
     "lint": "standard",
     "precommit": "npm run lint",
@@ -37,6 +38,7 @@
     "validate-commit-msg": "^2.11.1"
   },
   "dependencies": {
+    "cypress": "^3.4.1",
     "jquery": "^3.1.1"
   },
   "browserify": {
