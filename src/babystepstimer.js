@@ -24,7 +24,7 @@ class Babysteptimer {
 
   initialize () {
     this.setNeutralBackgroundColor()
-    this.updateTimer(0)
+    this.updateStoppedTimer()
     this.quitButton.click(() => {
       alert('Please close the window!')
     })
@@ -32,13 +32,13 @@ class Babysteptimer {
     const timerThread = new TimerThread(this)
     this.startButton.click(() => {
       this.setNeutralBackgroundColor()
-      this.updateTimer(0, true)
+      this.updateRunningTimer(0)
       timerThread.start()
     })
     this.stopButton.click(() => {
       timerThread.stop()
       this.setNeutralBackgroundColor()
-      this.updateTimer(0, false)
+      this.updateStoppedTimer()
     })
     this.resetButton.click(() => {
       timerThread.reset()
@@ -46,18 +46,20 @@ class Babysteptimer {
     })
   }
 
-  updateTimer (time, running) {
+  updateRunningTimer (time) {
     this.timerDisplay.text(this.getRemainingTimeCaption(time))
     this.timer.css('background-color', this.bodyBackgroundColor)
-    if (running) {
-      this.stopButton.show()
-      this.resetButton.show()
-      this.startButton.hide()
-    } else {
-      this.stopButton.hide()
-      this.resetButton.hide()
-      this.startButton.show()
-    }
+    this.stopButton.show()
+    this.resetButton.show()
+    this.startButton.hide()
+  }
+
+  updateStoppedTimer () {
+    this.timerDisplay.text(this.getRemainingTimeCaption(0))
+    this.timer.css('background-color', this.bodyBackgroundColor)
+    this.stopButton.hide()
+    this.resetButton.hide()
+    this.startButton.show()
   }
 
   getRemainingTimeCaption (elapsedTime) {
@@ -132,7 +134,7 @@ class TimerThread {
           this.timer.playSound('shipsbell')
           this.timer.setFailedBackgroundColor()
         }
-        this.timer.updateTimer(elapsedTime, true)
+        this.timer.updateRunningTimer(elapsedTime)
         this.lastRemainingTime = remainingTime
       }
     }, 10)
