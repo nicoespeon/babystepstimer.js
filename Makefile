@@ -1,7 +1,7 @@
 .PHONY: build
 
 build/babystepstimer.js: dist
-	./node_modules/.bin/browserify dist/babystepstimer.js -o $@
+	./node_modules/.bin/browserify dist/index.js -o $@
 
 dist: src/*.js
 	rm -rf $@
