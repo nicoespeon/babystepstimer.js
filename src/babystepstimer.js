@@ -81,9 +81,8 @@ class TimerThread {
   }
 
   start () {
-    if (timerRunning) return false
+    if (timerRunning) return
     this.run()
-    return true
   }
 
   run () {
