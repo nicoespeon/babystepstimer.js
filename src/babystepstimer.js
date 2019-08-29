@@ -3,7 +3,6 @@
 const BACKGROUND_COLOR_NEUTRAL = '#ffffff'
 const BACKGROUND_COLOR_FAILED = '#ffcccc'
 const BACKGROUND_COLOR_PASSED = '#ccffcc'
-let bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
 
 const SECONDS_IN_CYCLE = 120
 
@@ -24,29 +23,32 @@ class Babysteptimer {
   }
 
   initialize () {
-    this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL)
+    this.setNeutralBackgroundColor()
+    this.updateTimer(0)
     this.quitButton.click(() => {
       alert('Please close the window!')
     })
 
     const timerThread = new TimerThread(this)
     this.startButton.click(() => {
-      this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, true)
+      this.setNeutralBackgroundColor()
+      this.updateTimer(0, true)
       timerThread.start()
     })
     this.stopButton.click(() => {
       timerThread.stop()
-      this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, false)
+      this.setNeutralBackgroundColor()
+      this.updateTimer(0, false)
     })
     this.resetButton.click(() => {
       timerThread.reset()
-      bodyBackgroundColor = BACKGROUND_COLOR_PASSED
+      this.setPassedBackgroundColor()
     })
   }
 
-  updateTimer (time, color, running) {
+  updateTimer (time, running) {
     this.timerDisplay.text(this.getRemainingTimeCaption(time))
-    this.timer.css('background-color', color)
+    this.timer.css('background-color', this.bodyBackgroundColor)
     if (running) {
       this.stopButton.show()
       this.resetButton.show()
@@ -67,6 +69,18 @@ class Babysteptimer {
 
   playSound (name) {
     new Audio('./sounds/' + name + '.wav').play()
+  }
+
+  setNeutralBackgroundColor () {
+    this.bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
+  }
+
+  setPassedBackgroundColor () {
+    this.bodyBackgroundColor = BACKGROUND_COLOR_PASSED
+  }
+
+  setFailedBackgroundColor () {
+    this.bodyBackgroundColor = BACKGROUND_COLOR_FAILED
   }
 }
 
@@ -102,8 +116,8 @@ class TimerThread {
         this.currentCycleStartTime = Date.now()
         elapsedTime = Date.now() - this.currentCycleStartTime
       }
-      if (elapsedTime >= 5000 && elapsedTime < 6000 && BACKGROUND_COLOR_NEUTRAL !== bodyBackgroundColor) {
-        bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
+      if (elapsedTime >= 5000 && elapsedTime < 6000 && BACKGROUND_COLOR_NEUTRAL !== this.timer.bodyBackgroundColor) {
+        this.timer.setNeutralBackgroundColor()
       }
 
       let remainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
@@ -112,9 +126,9 @@ class TimerThread {
           this.timer.playSound('struck')
         } else if (remainingTime === '00:00') {
           this.timer.playSound('shipsbell')
-          bodyBackgroundColor = BACKGROUND_COLOR_FAILED
+          this.timer.setFailedBackgroundColor()
         }
-        this.timer.updateTimer(elapsedTime, bodyBackgroundColor, true)
+        this.timer.updateTimer(elapsedTime, true)
         this.lastRemainingTime = remainingTime
       }
     }, 10)
