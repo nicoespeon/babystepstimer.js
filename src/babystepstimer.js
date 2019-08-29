@@ -70,8 +70,6 @@ class Babysteptimer {
   }
 }
 
-let lastRemainingTime
-
 /**
  * TODO: Maybe use requestAnimationFrame
  */
@@ -109,7 +107,7 @@ class TimerThread {
       }
 
       let remainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
-      if (remainingTime !== lastRemainingTime) {
+      if (remainingTime !== this.lastRemainingTime) {
         if (remainingTime === '00:10') {
           this.timer.playSound('struck')
         } else if (remainingTime === '00:00') {
@@ -117,7 +115,7 @@ class TimerThread {
           bodyBackgroundColor = BACKGROUND_COLOR_FAILED
         }
         this.timer.updateTimer(elapsedTime, bodyBackgroundColor, true)
-        lastRemainingTime = remainingTime
+        this.lastRemainingTime = remainingTime
       }
     }, 10)
   }
