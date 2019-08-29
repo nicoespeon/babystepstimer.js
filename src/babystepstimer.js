@@ -28,12 +28,14 @@ class Babysteptimer {
     this.quitButton.click(() => {
       alert('Please close the window!')
     })
+
+    const timerThread = new TimerThread(this)
     this.startButton.click(() => {
       this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, true)
-      new TimerThread(this).start()
+      timerThread.start()
     })
     this.stopButton.click(() => {
-      timerRunning = false
+      timerThread.stop()
       this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, false)
     })
     this.resetButton.click(() => {
@@ -68,7 +70,6 @@ class Babysteptimer {
   }
 }
 
-let timerRunning = false
 let currentCycleStartTime
 let lastRemainingTime
 
@@ -78,18 +79,23 @@ let lastRemainingTime
 class TimerThread {
   constructor (timer) {
     this.timer = timer
+    this.timerRunning = false
   }
 
   start () {
-    if (timerRunning) return
+    if (this.timerRunning) return
+    this.timerRunning = true
     this.run()
   }
 
+  stop () {
+    this.timerRunning = false
+  }
+
   run () {
-    timerRunning = true
     currentCycleStartTime = Date.now()
     this.interval = window.setInterval(() => {
-      if (!timerRunning) return
+      if (!this.timerRunning) return
       let elapsedTime = Date.now() - currentCycleStartTime
       if (elapsedTime >= SECONDS_IN_CYCLE * 1000 + 980) {
         currentCycleStartTime = Date.now()
