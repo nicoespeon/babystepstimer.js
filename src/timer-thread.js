@@ -1,3 +1,5 @@
+import { Sound } from './sound'
+
 /**
  * TODO: Maybe use requestAnimationFrame
  */
@@ -6,6 +8,7 @@ class TimerThread {
     this.timer = timer
     this.bodyBackground = bodyBackground
     this.timerRunning = false
+    this.sound = new Sound()
   }
 
   start () {
@@ -38,9 +41,9 @@ class TimerThread {
 
       if (this.timer.getRemainingTimeCaption(elapsedTime) !== this.lastRemainingTime) {
         if (this.timer.getRemainingTimeCaption(elapsedTime) === '00:10') {
-          this.timer.playSound('struck')
+          this.sound.playStruck()
         } else if (this.timer.getRemainingTimeCaption(elapsedTime) === '00:00') {
-          this.timer.playSound('shipsbell')
+          this.sound.playShipsbell()
           this.bodyBackground.setFailed()
         }
         this.timer.updateRunningTimer(elapsedTime)

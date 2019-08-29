@@ -1,4 +1,4 @@
-/* globals Audio, alert */
+/* globals alert */
 
 import { TimerThread } from './timer-thread'
 import { BodyBackground } from './body-background'
@@ -69,10 +69,6 @@ class Babysteptimer {
     const remainingSeconds = this.secondsInCycle - elapsedSeconds
     const remainingMinutes = remainingSeconds / 60
     return twoDigitsFormat(remainingMinutes) + ':' + twoDigitsFormat(remainingSeconds - Math.floor(remainingMinutes) * 60)
-  }
-
-  playSound (name) {
-    new Audio('./sounds/' + name + '.wav').play()
   }
 }
 
