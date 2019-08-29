@@ -30,7 +30,7 @@ class Babysteptimer {
     })
     this.startButton.click(() => {
       this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL, true)
-      new TimerThread().start()
+      new TimerThread(this).start()
     })
     this.stopButton.click(() => {
       timerRunning = false
@@ -43,7 +43,7 @@ class Babysteptimer {
   }
 
   updateTimer (time, color, running) {
-    this.timerDisplay.text(Babysteptimer.getRemainingTimeCaption(time))
+    this.timerDisplay.text(this.getRemainingTimeCaption(time))
     this.timer.css('background-color', color)
     if (running) {
       this.stopButton.show()
@@ -56,14 +56,14 @@ class Babysteptimer {
     }
   }
 
-  static getRemainingTimeCaption (elapsedTime) {
+  getRemainingTimeCaption (elapsedTime) {
     const elapsedSeconds = elapsedTime / 1000
     const remainingSeconds = SECONDS_IN_CYCLE - elapsedSeconds
     const remainingMinutes = remainingSeconds / 60
     return twoDigitsFormat(remainingMinutes) + ':' + twoDigitsFormat(remainingSeconds - Math.floor(remainingMinutes) * 60)
   }
 
-  static playSound (name) {
+  playSound (name) {
     new Audio('./sounds/' + name + '.wav').play()
   }
 }
@@ -76,6 +76,10 @@ let lastRemainingTime
  * TODO: Maybe use requestAnimationFrame
  */
 class TimerThread {
+  constructor (timer) {
+    this.timer = timer
+  }
+
   start () {
     if (timerRunning) return false
     this.run()
@@ -96,15 +100,15 @@ class TimerThread {
         bodyBackgroundColor = BACKGROUND_COLOR_NEUTRAL
       }
 
-      let remainingTime = Babysteptimer.getRemainingTimeCaption(elapsedTime)
+      let remainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
       if (remainingTime !== lastRemainingTime) {
         if (remainingTime === '00:10') {
-          Babysteptimer.playSound('struck')
+          this.timer.playSound('struck')
         } else if (remainingTime === '00:00') {
-          Babysteptimer.playSound('shipsbell')
+          this.timer.playSound('shipsbell')
           bodyBackgroundColor = BACKGROUND_COLOR_FAILED
         }
-        Babysteptimer.updateTimer(elapsedTime, bodyBackgroundColor, true)
+        this.timer.updateTimer(elapsedTime, bodyBackgroundColor, true)
         lastRemainingTime = remainingTime
       }
     }, 10)
