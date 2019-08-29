@@ -3,6 +3,14 @@ const BACKGROUND_COLOR_FAILED = '#ffcccc'
 const BACKGROUND_COLOR_PASSED = '#ccffcc'
 
 class BodyBackground {
+  constructor (body) {
+    this.body = body
+  }
+
+  applyColor () {
+    this.body.css('background-color', this.color)
+  }
+
   isNeutral () {
     return this.color === BACKGROUND_COLOR_NEUTRAL
   }

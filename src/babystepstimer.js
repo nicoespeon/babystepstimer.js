@@ -14,41 +14,44 @@ const twoDigitsFormat = number => ('0' + Math.floor(number)).slice(-2)
 class Babysteptimer {
   constructor ({ timerDisplay, timer, stopButton, resetButton, startButton, quitButton }) {
     this.timerDisplay = timerDisplay
-    this.timer = timer
     this.stopButton = stopButton
     this.resetButton = resetButton
     this.startButton = startButton
     this.quitButton = quitButton
-    this.bodyBackground = new BodyBackground()
+    this.bodyBackground = new BodyBackground(timer)
   }
 
   initialize () {
+    const timerThread = new TimerThread(this, this.bodyBackground)
+
     this.bodyBackground.setNeutral()
     this.updateStoppedTimer()
-    this.quitButton.click(() => {
-      alert('Please close the window!')
-    })
 
-    const timerThread = new TimerThread(this, this.bodyBackground)
     this.startButton.click(() => {
       this.bodyBackground.setNeutral()
       this.updateRunningTimer(0)
       timerThread.start()
     })
+
     this.stopButton.click(() => {
-      timerThread.stop()
       this.bodyBackground.setNeutral()
       this.updateStoppedTimer()
+      timerThread.stop()
     })
+
     this.resetButton.click(() => {
-      timerThread.reset()
       this.bodyBackground.setPassed()
+      timerThread.reset()
+    })
+
+    this.quitButton.click(() => {
+      alert('Please close the window!')
     })
   }
 
   updateRunningTimer (time) {
     this.timerDisplay.text(this.getRemainingTimeCaption(time))
-    this.timer.css('background-color', this.bodyBackground.color)
+    this.bodyBackground.applyColor()
     this.stopButton.show()
     this.resetButton.show()
     this.startButton.hide()
@@ -56,7 +59,7 @@ class Babysteptimer {
 
   updateStoppedTimer () {
     this.timerDisplay.text(this.getRemainingTimeCaption(0))
-    this.timer.css('background-color', this.bodyBackground.color)
+    this.bodyBackground.applyColor()
     this.stopButton.hide()
     this.resetButton.hide()
     this.startButton.show()
