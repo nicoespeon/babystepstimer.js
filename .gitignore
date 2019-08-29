@@ -2,3 +2,4 @@
 /dist
 /build
 cypress/videos/
+cypress/screenshots/
