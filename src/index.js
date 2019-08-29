@@ -11,4 +11,5 @@ const stopButton = $('#stop')
 const resetButton = $('#reset')
 
 /* eslint-disable no-new */
-new Babysteptimer({ timerDisplay, timer, stopButton, resetButton, startButton, quitButton })
+const babyStepTimer = new Babysteptimer({ timerDisplay, timer, stopButton, resetButton, startButton, quitButton })
+babyStepTimer.initialize()

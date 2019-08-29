@@ -21,7 +21,9 @@ class Babysteptimer {
     this.resetButton = resetButton
     this.startButton = startButton
     this.quitButton = quitButton
+  }
 
+  initialize () {
     this.updateTimer(0, BACKGROUND_COLOR_NEUTRAL)
     this.quitButton.click(() => {
       alert('Please close the window!')
