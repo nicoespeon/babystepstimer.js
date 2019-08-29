@@ -112,5 +112,4 @@ class TimerThread {
   }
 }
 
-/* eslint-disable no-new */
-new Babysteptimer()
+export { Babysteptimer }
