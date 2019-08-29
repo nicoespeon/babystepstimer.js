@@ -1,5 +1,3 @@
-const SECONDS_IN_CYCLE = 120
-
 /**
  * TODO: Maybe use requestAnimationFrame
  */
@@ -28,8 +26,9 @@ class TimerThread {
     this.reset()
     this.interval = window.setInterval(() => {
       if (!this.timerRunning) return
+
       let elapsedTime = Date.now() - this.currentCycleStartTime
-      if (elapsedTime >= SECONDS_IN_CYCLE * 1000 + 980) {
+      if (elapsedTime >= this.timer.secondsInCycle * 1000 + 980) {
         this.currentCycleStartTime = Date.now()
         elapsedTime = Date.now() - this.currentCycleStartTime
       }
@@ -37,16 +36,15 @@ class TimerThread {
         this.bodyBackground.setNeutral()
       }
 
-      let remainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
-      if (remainingTime !== this.lastRemainingTime) {
-        if (remainingTime === '00:10') {
+      if (this.timer.getRemainingTimeCaption(elapsedTime) !== this.lastRemainingTime) {
+        if (this.timer.getRemainingTimeCaption(elapsedTime) === '00:10') {
           this.timer.playSound('struck')
-        } else if (remainingTime === '00:00') {
+        } else if (this.timer.getRemainingTimeCaption(elapsedTime) === '00:00') {
           this.timer.playSound('shipsbell')
           this.bodyBackground.setFailed()
         }
         this.timer.updateRunningTimer(elapsedTime)
-        this.lastRemainingTime = remainingTime
+        this.lastRemainingTime = this.timer.getRemainingTimeCaption(elapsedTime)
       }
     }, 10)
   }

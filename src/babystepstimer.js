@@ -3,8 +3,6 @@
 import { TimerThread } from './timer-thread'
 import { BodyBackground } from './body-background'
 
-const SECONDS_IN_CYCLE = 120
-
 const twoDigitsFormat = number => ('0' + Math.floor(number)).slice(-2)
 
 /**
@@ -19,6 +17,7 @@ class Babysteptimer {
     this.startButton = startButton
     this.quitButton = quitButton
     this.bodyBackground = new BodyBackground(timer)
+    this.secondsInCycle = 120
   }
 
   initialize () {
@@ -67,7 +66,7 @@ class Babysteptimer {
 
   getRemainingTimeCaption (elapsedTime) {
     const elapsedSeconds = elapsedTime / 1000
-    const remainingSeconds = SECONDS_IN_CYCLE - elapsedSeconds
+    const remainingSeconds = this.secondsInCycle - elapsedSeconds
     const remainingMinutes = remainingSeconds / 60
     return twoDigitsFormat(remainingMinutes) + ':' + twoDigitsFormat(remainingSeconds - Math.floor(remainingMinutes) * 60)
   }
